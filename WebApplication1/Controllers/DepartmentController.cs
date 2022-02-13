@@ -99,7 +99,7 @@ namespace WebApplication1.Controllers
             try
             {
                 string query = @"
-                            delete from sbo.Department
+                            delete from dbo.Department
                             where DepartmentId="+id+@"
                             ";
                 DataTable table = new DataTable();
