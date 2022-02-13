@@ -16,5 +16,6 @@ namespace WebApplication1.Models
         public string DateOfJoining { get; set; }
 
         public string PhotoFileName { get; set; }
+        public string DepartmentId { get; internal set; }
     }
 }
