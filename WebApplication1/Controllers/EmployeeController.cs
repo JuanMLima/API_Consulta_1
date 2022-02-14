@@ -4,25 +4,25 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WebApplication1.Models;
 using System.Data;
 using System.Data.SqlClient;
+using WebApplication1.Models;
 using System.Configuration;
 
 namespace WebApplication1.Controllers
 {
     public class EmployeeController : ApiController
     {
-
         public HttpResponseMessage Get()
         {
             string query = @"
-                    select EmployeeId, EmployeeName, Department,
-                    convert((varchar(10),  DateOfJoining,120) as  DateOfJoining,
-                    PhotFileName 
-                    from
-                    dbo.Employee
-                    ";
+                            select EmployeeId,EmployeeName,Department,
+                            convert(varchar(10),DateOfJoining,120) as DateOfJoining,
+                            PhotFileName
+                            from
+                            dbo.Employee
+                             ";
+
             DataTable table = new DataTable();
             using (var con = new SqlConnection(ConfigurationManager.
                 ConnectionStrings["EmployeeAppDB"].ConnectionString))
@@ -38,17 +38,17 @@ namespace WebApplication1.Controllers
 
         }
 
-        public string Post(Employee dep)
+        public string Post(Employee emp)
         {
             try
             {
                 string query = @"
                             insert into dbo.Employee values
                             (
-                            '" + dep.EmployeeName + @"'
-                            '" + dep.Department + @"'
-                            '" + dep.DateOfJoining+ @"'
-                            '" + dep.PhotoFileName+ @"'
+                            '" + emp.EmployeeName + @"'
+                            ,'" + emp.Department + @"'
+                            ,'" + emp.DateOfJoining + @"'
+                            ,'" + emp.PhotFileName + @"'
                             )
                             ";
                 DataTable table = new DataTable();
@@ -80,9 +80,10 @@ namespace WebApplication1.Controllers
                 string query = @"
                             update dbo.Employee set 
                             EmployeeName='" + emp.EmployeeName + @"'
-                            Department='" + emp.Department + @"'
-                            DateOfJoining='" + emp.DateOfJoining + @"'
-                            where EmployeedId=" + emp.EmployeeID + @"
+                            ,Department='" + emp.Department + @"'
+                            ,DateOfJoining='" + emp.DateOfJoining + @"'
+                            ,PhotFileName='" + emp.PhotFileName + @"'
+                            where EmployeeId=" + emp.EmployeeId + @"
                             ";
                 DataTable table = new DataTable();
                 using (var con = new SqlConnection(ConfigurationManager.
@@ -133,15 +134,13 @@ namespace WebApplication1.Controllers
                 return "Failed to Delete!!";
             }
         }
-
-        [Route("pai/Employee/GetAllDepartmentNames")]
+        [Route("api/Employee/GetAllDepartmentNames")]
         [HttpGet]
 
         public HttpResponseMessage GetAllDepartmentNames()
         {
             string query = @"
-                            select DepartmentName from dbo.Department
-                            ";
+                            select DepartmentName from dbo.Department";
 
             DataTable table = new DataTable();
             using (var con = new SqlConnection(ConfigurationManager.
@@ -154,7 +153,8 @@ namespace WebApplication1.Controllers
 
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK,table);
+            return Request.CreateResponse(HttpStatusCode.OK, table);
         }
+
     }
 }
